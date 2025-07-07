@@ -31,7 +31,7 @@ merged = pd.merge(sodaFiltered, d18OFiltered, on='year', how='inner')
 
 if {'year', 'tempAnoms', 'saltAnoms'}.issubset(merged.columns):
     ## using latitude/longitude for jonesport
-    lat, lon = 292.56, 44.44
+    lat, lon = (360-74.0868), 38.2268
 
     ## computing the pseudocarbonate for each year
     pseudocarbonateData = []

@@ -8,10 +8,10 @@ def calcOxyIsoAnoms(d18ORaw):
   ## loading the data
   d18ORaw = pd.read_csv(d18ORaw)
   ## computing avg d18O
-  d18OAvg = d18ORaw["jonesportIso"].mean()     
+  d18OAvg = d18ORaw["delmarvaIso"].mean()     
   ## computing the anomalies 
-  d18ORaw["d18OAnoms"] = d18ORaw["jonesportIso"] - d18OAvg
+  d18ORaw["d18OAnoms"] = d18ORaw["delmarvaIso"] - d18OAvg
   return d18ORaw[["year", "d18OAnoms"]]
 
 ## storing the result of the function
-d18OAnoms = calcOxyIsoAnoms("./d18O_data/jonesport")
+d18OAnoms = calcOxyIsoAnoms("./d18O_data/delmarva")
