@@ -65,8 +65,6 @@ mask_interp_bool = mask_interp > 0.5  # True=Ocean, False=Land
 ## masking the interpolated R18O field with the output grid ocean mask to remove land spillover
 field_interp_masked = np.where(mask_interp_bool, field_interp, np.nan)
 
-print(field_interp_masked)
-
 ## wrapping the masked interpolated data into an xarray.DataArray
 ds_interp_masked = xr.DataArray(
     field_interp_masked,
@@ -74,8 +72,6 @@ ds_interp_masked = xr.DataArray(
     dims=['lat', 'lon'],
     name='R18O'
 )
-
-print(ds_interp_masked)
 
 ## plotting the masked interpolated field on Robinson projection
 fig, ax = plt.subplots(figsize=(12, 6), subplot_kw={'projection': ccrs.Robinson()})
