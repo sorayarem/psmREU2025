@@ -73,10 +73,20 @@ ds_interp_masked = xr.DataArray(
     name='R18O'
 )
 
-## plotting the masked interpolated field on Robinson projection
-fig, ax = plt.subplots(figsize=(12, 6), subplot_kw={'projection': ccrs.Robinson()})
+## defining the region of interest
+lat_min, lat_max = 36, 45
+lon_min, lon_max = 284, 296
 
-ds_interp_masked.plot.pcolormesh(
+## selecting that specific subset from the data
+subset = ds_interp_masked.sel(
+    lat=slice(lat_min, lat_max),
+    lon=slice(lon_min, lon_max)
+)
+
+## plotting the masked interpolated field on Robinson projection
+fig, ax = plt.subplots(figsize=(10, 6), subplot_kw={'projection': ccrs.PlateCarree()})
+
+subset.plot.pcolormesh(
     ax=ax,
     transform=ccrs.PlateCarree(),
     cmap='viridis',
@@ -84,7 +94,7 @@ ds_interp_masked.plot.pcolormesh(
     y='lat'
 )
 
+ax.set_extent([284, 296, 36, 45], crs=ccrs.PlateCarree()) 
 ax.coastlines()
-ax.set_global()
 plt.title('R18O regridded and masked to ocean (no land spillover)')
 plt.show()
