@@ -39,4 +39,4 @@ def calcSodaAnoms(sodaRawFile):
     print("Returning results.")
     return annualMeans
 
-sodaAnnualAnoms = calcSodaAnoms("./csv_clean/delmarvaCSV.csv")
+sodaAnnualAnoms = calcSodaAnoms("./csv_clean/delmarvaCSV.csv", "")

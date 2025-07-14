@@ -73,10 +73,10 @@ ds_interp_masked = xr.DataArray(
     name='R18O'
 )
 
-df = ds_interp_masked.to_dataframe()
-table = df.to_csv('iCESMRaw.csv')
+## defining the region of interest
+lat_min, lat_max = 36, 45
+lon_min, lon_max = 284, 296
 
-'''
 ## plotting the masked interpolated field on Robinson projection
 fig, ax = plt.subplots(figsize=(10, 6), subplot_kw={'projection': ccrs.PlateCarree()})
 
@@ -99,11 +99,10 @@ ax.set_extent([284, 296, 36, 45], crs=ccrs.PlateCarree())
 ax.coastlines()
 plt.title('R18O regridded and masked to ocean (no land spillover)')
 plt.show()
-'''
 
 ## finding R18O values
-siteLon =  360-74.0868
-siteLat =  38.2268
+siteLon =  360-73.01238
+siteLat =  40.09925
 
 ## finding the nearest salinity value
 nearest_salinity = ds_interp_masked.sel(
