@@ -53,6 +53,8 @@ xbnds = [-76.1,-64.0] #define your range of longitudes
 ybnds = [36.0,45.0] #define your range of latitudes
 temp_ave = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
 temp_ave = temp_ave.mean('time_counter')
+temp_ave.to_netcdf(path = 'viking1958.nc')
+
 
 ##select all areas where temperature does not equal 0 (temperature equals 0 on land in VIKING20X so this is essentially getting all ocean data)
 
