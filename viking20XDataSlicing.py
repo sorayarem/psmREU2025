@@ -1,9 +1,6 @@
 ## code modified from svenja ryan
 ## and nina whitney
 ## developed by soraya remaili
-import os
-import numpy as np
-import pandas as pd
 import xarray as xr
 
 # turn off warnings
@@ -36,10 +33,9 @@ extension = '.nc'
 
 ## downloading and trimming the .nc files
 start =  '1_VIKING20X.L46-KFS003_1m_'
-end =  '_vosaline_45W_80W_30N_57N_upper1000m'
+end =  '_votemper_45W_80W_30N_57N_upper1000m'
 extension = '.nc'
-for i in range (1963, 2020):
+for i in range (1958, 2020):
     ds = xr.open_dataset(start + str(i) + '0101_' + str(i) + '1231' + end + extension)
     temp_ave = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-    temp_ave = temp_ave.mean('time_counter')
-    temp_ave.to_netcdf(path = './vikingSALINE/vikingSALINE' + str(i) + extension)
+    temp_ave.to_netcdf(path = './vikingTEMP/vikingTEMP' + str(i) + extension) 

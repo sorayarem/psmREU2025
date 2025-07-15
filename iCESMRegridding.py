@@ -76,7 +76,6 @@ ds_interp_masked = xr.DataArray(
 df = ds_interp_masked.to_dataframe()
 table = df.to_csv('iCESMRaw.csv')
 
-'''
 ## plotting the masked interpolated field on Robinson projection
 fig, ax = plt.subplots(figsize=(10, 6), subplot_kw={'projection': ccrs.PlateCarree()})
 
@@ -99,7 +98,7 @@ ax.set_extent([284, 296, 36, 45], crs=ccrs.PlateCarree())
 ax.coastlines()
 plt.title('R18O regridded and masked to ocean (no land spillover)')
 plt.show()
-'''
+
 
 ## finding R18O values
 siteLon =  360-74.0868

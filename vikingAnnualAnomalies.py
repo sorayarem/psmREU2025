@@ -2,41 +2,68 @@
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
 import pandas as pd
+import xarray as xr
+import matplotlib.pyplot as plt
 
 ## calculating the temp and salt anomalies for each month
-def calcSodaAnoms(sodaRawFile):
-    ## loading in the combined .csv file
+def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
+
+    ## loading in the combined .nc file
     print("Loading file...")
-    sodaRaw = pd.read_csv(sodaRawFile)
-    print("Checking columns...", sodaRaw.columns)
-
-    ## converting from string to date-time object
-    print("Converting time column...")
-    sodaRaw['time'] = pd.to_datetime(sodaRaw['time'], format= 'mixed')
-    sodaRaw['time'] = sodaRaw['time'].dt.to_period('M')
-
+    dsTemp = xr.open_dataset(vikingTEMPFile)
+    dsSaline = xr.open_dataset(vikingSALINEFile)
+    
     ## getting just the month and year
     print("Extracting month and year...")
-    sodaRaw['month'] = sodaRaw['time'].dt.month
-    sodaRaw['year'] = sodaRaw['time'].dt.year
+    dsTemp['month'] = dsTemp['time_counter'].dt.month
+    dsTemp['year'] = dsTemp['time_counter'].dt.year
+
+    dsSaline['month'] = dsSaline['time_counter'].dt.month
+    dsSaline['year'] = dsSaline['time_counter'].dt.year
+
+    dsTemp = dsTemp.assign_coords(year=dsTemp['time_counter'].dt.year,month=dsTemp['time_counter'].dt.month)
+    dsSaline = dsSaline.assign_coords(year=dsSaline['time_counter'].dt.year,month=dsSaline['time_counter'].dt.month)
 
     print("Computing monthly mean temp and salinity...")
-    sodaAnom = sodaRaw.groupby(['time', 'year', 'month'], as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
+    vikingAnomTemp = dsTemp['votemper'].groupby(['year', 'month']).mean('time_counter')
+    vikingAnomSaline = dsSaline['vosaline'].groupby(['year', 'month']).mean('time_counter')
+
 
     print("Computing monthly means...")
-    monthlyMeans = sodaAnom.groupby('month', as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
+    monthlyMeansTemp =  dsTemp['votemper'].groupby('month').mean('time_counter')
+    monthlyMeansSaline =  dsSaline['vosaline'].groupby('month').mean('time_counter')
 
-    print("Merging anomalies with original data...")
-    sodaAnom = sodaAnom.merge(monthlyMeans, on="month", suffixes=("", "_mean"))
 
     print("Calculating anomalies...")
-    sodaAnom["tempAnoms"] = sodaAnom["temp"] - sodaAnom["temp_mean"]
-    sodaAnom["saltAnoms"] = sodaAnom["salt"] - sodaAnom["salt_mean"]
+    tempAnomalies = vikingAnomTemp - monthlyMeansTemp
+    saltAnomalies = vikingAnomSaline - monthlyMeansSaline
 
-    print("Computing annual means...")
-    annualMeans = sodaAnom.groupby('year', as_index=False).agg({'tempAnoms': 'mean', 'saltAnoms': 'mean'})
+    spatialMeanAnomsTemp = tempAnomalies.mean(dim=['deptht', 'y', 'x'])
+    spatialMeanAnomsSaline = saltAnomalies.mean(dim=['deptht', 'y', 'x'])
+
+    print("Computing annual anomalies...")
+    annualTempAnoms = spatialMeanAnomsTemp.groupby('year').mean('month')
+    annualSalineAnoms = spatialMeanAnomsSaline.groupby('year').mean('month')
+
+    print("Combining the results...")
+    resultAnomalies = annualTempAnoms
+    resultAnomalies['salt'] = annualSalineAnoms
 
     print("Returning results.")
-    return annualMeans
+    return resultAnomalies
 
-sodaAnnualAnoms = calcSodaAnoms("./csv_clean/delmarvaCSV.csv")
+vikingAnnualAnoms = calcSodaAnoms("viking_ALLTEMP.nc", "viking_ALLSALINE.nc")
+years = vikingAnnualAnoms['year'].values
+temps = vikingAnnualAnoms.values
+salts = vikingAnnualAnoms['salt'].values
+
+plt.figure(figsize=(10, 5))
+plt.plot(years, temps, label='Temp Anomalies', linestyle='-', color='#008080')  # Teal
+plt.plot(years, salts, label='Salt Anomalies', linestyle='-', color='#D2691E')  # Dark Orange
+plt.xlabel('Time')
+plt.ylabel('Anomaly Value')
+plt.title('Temperature and Salinity Anomalies Over Time')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
