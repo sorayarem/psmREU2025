@@ -3,8 +3,8 @@
 ## developed by soraya remaili
 import pandas as pd
 import numpy as np
-from sodaAnnualAnomalies import sodaAnnualAnoms
-from oxyIsoAnomalies import d18OAnoms
+from delmarvaAnnualAnomalies import sodaAnnualAnoms
+from delmarvaOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
 lonVector = pd.read_csv('./map_data/longitudes.csv')
@@ -30,7 +30,7 @@ d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 merged = pd.merge(sodaFiltered, d18OFiltered, on='year', how='inner')
 
 if {'year', 'tempAnoms', 'saltAnoms'}.issubset(merged.columns):
-    ## using latitude/longitude for jonesport
+    ## using dummy latitude/longitude
     lat, lon = (360-74.0868), 38.2268
 
     ## computing the pseudocarbonate for each year
@@ -59,7 +59,7 @@ plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linesty
 
 plt.xlabel('Time')
 plt.ylabel('Anomaly Value')
-plt.title('Jonesport - d18O-carb and d18O-pseudo Over Time')
+plt.title('Delmarva - d18O-carb and d18O-pseudo Over Time')
 plt.legend()
 plt.grid(True)
 

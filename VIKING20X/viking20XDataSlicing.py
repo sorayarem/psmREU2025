@@ -2,6 +2,12 @@
 ## and nina whitney
 ## developed by soraya remaili
 import xarray as xr
+import glob
+
+files = sorted(glob.glob("./vikingSALINE/*.nc"))
+viking_ALLSALINE = xr.open_mfdataset(files, combine='by_coords')
+viking_ALLSALINE.to_netcdf('viking_ALLSALINE.nc')
+
 
 # turn off warnings
 import warnings
