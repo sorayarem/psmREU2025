@@ -48,54 +48,55 @@ isotopes.to_netcdf(path = './iCESM/iCESMSalt.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
-xbnds = [-74.15, -74.05] #define your range of longitudes
-ybnds = [38.15, 38.25] #define your range of latitudes
+ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+xbnds = [285, 286] #define your range of longitudes
+ybnds = [38, 39] #define your range of latitudes
 
-delmarva = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-delmarva.to_netcdf(path = './VIKING20X/selections/tempDELMARVA.nc') 
+delmarva = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
+delmarva.to_netcdf(path = './iCESM/selections/tempDELMARVA.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
-xbnds = [-73.05, -72.95] #define your range of longitudes
-ybnds = [40.05, 40.15] #define your range of latitudes
+ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+xbnds = [287, 288] #define your range of longitudes
+ybnds = [39.5, 40.5] #define your range of latitudes
 
-longisland = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-longisland.to_netcdf(path = './VIKING20X/selections/saltLONGISLAND.nc') 
+longisland = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
+longisland.to_netcdf(path = './iCESM/selections/tempLONGISLAND.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
-xbnds = [-67.85, -67.75] #define your range of longitudes
-ybnds = [40.65, 40.75] #define your range of latitudes
+ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+xbnds = [292,293] #define your range of longitudes
+ybnds = [40, 41] #define your range of latitudes
 
-georges = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-georges.to_netcdf(path = './VIKING20X/selections/tempGEORGES.nc') 
+georges = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
+georges.to_netcdf(path = './iCESM/selections/tempGEORGES.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
-xbnds = [-68.75, -68.65] #define your range of longitudes
-ybnds = [43.95, 44.05] #define your range of latitudes
+ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+xbnds = [291, 292] #define your range of longitudes
+ybnds = [43.5, 44.5] #define your range of latitudes
 
-isleauhaut = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-isleauhaut.to_netcdf(path = './VIKING20X/selections/saltISLEAUHAUT.nc') 
+isleauhaut = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
+isleauhaut.to_netcdf(path = './iCESM/selections/tempISLEAUHAUT.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
-xbnds = [-69.85, -69.75] #define your range of longitudes
-ybnds = [43.65, 43.75] #define your range of latitudes
+ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+xbnds = [290, 291] #define your range of longitudes
+ybnds = [43, 44] #define your range of latitudes
 
-seguin = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-seguin.to_netcdf(path = './VIKING20X/selections/tempSEGUIN.nc') 
+seguin = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
+seguin.to_netcdf(path = './iCESM/selections/tempSEGUIN.nc') 
 '''
 
+'''
 ds = xr.open_dataset("./iCESM/iCESMSalt.nc")
 xbnds = [292,293] #define your range of longitudes
 ybnds = [44.0,45.0] #define your range of latitudes
 
 jonesport = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 jonesport.to_netcdf(path = './iCESM/selections/saltJONESPORT.nc') 
-
+'''
