@@ -26,6 +26,7 @@ def calcSodaAnoms(sodaRawFile):
     sodaRaw['month'] = sodaRaw['time'].dt.month
     sodaRaw['year'] = sodaRaw['expertYear']
 
+
     print("Computing monthly mean temp and salinity...")
     sodaAnom = sodaRaw.groupby(['time', 'year', 'month'], as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
 
@@ -45,5 +46,4 @@ def calcSodaAnoms(sodaRawFile):
     print("Returning results.")
     return annualMeans
 
-sodaExpertAnoms = calcSodaAnoms("./csv_clean/jonesportCSV.csv")
-
+sodaExpertAnoms = calcSodaAnoms("./csv_clean/seguinCSV.csv")

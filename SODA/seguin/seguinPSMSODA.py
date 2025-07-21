@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 from seguinAnnualAnomalies import sodaAnnualAnoms
+from seguinExpertAnomalies import sodaExpertAnoms
 from seguinOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
