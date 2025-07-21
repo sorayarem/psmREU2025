@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 ## getting the iCESM output .nc file
-ds = xr.open_dataset("b.ie12.B1850C5CN.f19_g16.LME.003.pop.h.R18O.185001-200512.nc")
+ds = xr.open_dataset("FIXFILEPATH.nc")
 
 ## selecting a single time slice and depth level (2D: nlat x nlon)
 r18o_single = ds['R18O'].isel(time=0, z_t=10)

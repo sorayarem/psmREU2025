@@ -53,18 +53,4 @@ def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
     print("Returning results.")
     return resultAnomalies
 
-vikingAnnualAnoms = calcSodaAnoms("viking_ALLTEMP.nc", "viking_ALLSALINE.nc")
-years = vikingAnnualAnoms['year'].values
-temps = vikingAnnualAnoms['temp'].values
-salts = vikingAnnualAnoms['salt'].values
-
-plt.figure(figsize=(10, 5))
-plt.plot(years, temps, label='Temp Anomalies', linestyle='-', color='#008080')  # Teal
-plt.plot(years, salts, label='Salt Anomalies', linestyle='-', color='#D2691E')  # Dark Orange
-plt.xlabel('Time')
-plt.ylabel('Anomaly Value')
-plt.title('Temperature and Salinity Anomalies Over Time')
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.show()
+vikingAnnualAnoms = calcSodaAnoms("./VIKING20X/selections/tempISLEAUHAUT.nc", "./VIKING20X/selections/saltISLEAUHAUT.nc")
