@@ -38,8 +38,10 @@ def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
     tempAnomalies = vikingAnomTemp - monthlyMeansTemp
     saltAnomalies = vikingAnomSaline - monthlyMeansSaline
 
-    spatialMeanAnomsTemp = tempAnomalies.mean(dim=['deptht', 'y', 'x'])
-    spatialMeanAnomsSaline = saltAnomalies.mean(dim=['deptht', 'y', 'x'])
+    spatialMeanAnomsTemp = tempAnomalies.mean(dim=['y', 'x'])
+    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(deptht = 63, method = 'nearest')
+    spatialMeanAnomsSaline = saltAnomalies.mean(dim=['y', 'x'])
+    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(deptht = 63, method = 'nearest')
 
     print("Computing annual anomalies...")
     annualTempAnoms = spatialMeanAnomsTemp.groupby('year').mean('month')

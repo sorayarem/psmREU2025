@@ -37,8 +37,11 @@ def calcSodaAnoms(iCESMTEMPFile, iCESMSALINEFile):
     tempAnomalies = iCESMAnomTemp - monthlyMeansTemp
     saltAnomalies = iCESMAnomSaline - monthlyMeansSaline
 
-    spatialMeanAnomsTemp = tempAnomalies.mean(dim=['z_t', 'nlat', 'nlon'])
-    spatialMeanAnomsSaline = saltAnomalies.mean(dim=['z_t', 'nlat', 'nlon'])
+    spatialMeanAnomsTemp = tempAnomalies.mean(dim=['nlat', 'nlon'])
+    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(z_t = 48, method = 'nearest')
+    spatialMeanAnomsSaline = saltAnomalies.mean(dim=['nlat', 'nlon'])
+    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(z_t = 48, method = 'nearest')
+
     print("Computing annual anomalies...")
     annualTempAnoms = spatialMeanAnomsTemp.groupby('year').mean('month')
     annualSalineAnoms = spatialMeanAnomsSaline.groupby('year').mean('month')
