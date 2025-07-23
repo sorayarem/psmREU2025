@@ -16,7 +16,7 @@ def pseudocarbonate(lat, lon, SST, SSS, d18O=-1, species="default", data_to_use=
     a2 = 0.97002 * 0.55
 
     ## calculating pseudocarbonate value
-    carbonate = a1 * SST + (d18O if d18O != -1 else a2 * SSS)
+    carbonate = (d18O if d18O != -1 else a2 * SSS)
     return carbonate
 
 ## finding the years that are in both datasets
