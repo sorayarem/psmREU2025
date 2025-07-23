@@ -31,12 +31,9 @@ d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 
 d18OFilteredNoDup = d18OFiltered.groupby('year').mean().reset_index()
 
-print("d18OAnoms shape:", d18OFiltered['d18OAnoms'].shape)
-print("year shape:", d18OFiltered['year'].shape)
-
 d18OXRArray = xr.DataArray(
     d18OFilteredNoDup['d18OAnoms'].values,
-    coords={'year': d18OFiltered['year'].values},
+    coords={'year': d18OFilteredNoDup['year'].values},
     dims='year',
     name='d18OAnoms'
 )
