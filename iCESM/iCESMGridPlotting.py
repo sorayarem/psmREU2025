@@ -28,7 +28,7 @@ import cartopy   # package to plot maps
 import warnings
 warnings.filterwarnings("ignore")
 
-ds = xr.open_dataset("./iCESM/selections/tempLONGISLAND.nc")
+ds = xr.open_dataset("./iCESM/selections/tempDELMARVA.nc")
 temp_ave = ds.mean('time')
 temp_ave = temp_ave.mean('z_t')
 temp_ave = temp_ave['TEMP']
