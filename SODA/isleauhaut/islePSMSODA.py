@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 from isleAnnualAnomalies import sodaAnnualAnoms
+from isleExpertAnomalies import sodaExpertAnoms
 from isleOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
@@ -16,14 +17,14 @@ def pseudocarbonate(lat, lon, SST, SSS, d18O=-1, species="default", data_to_use=
     a2 = 0.97002 * 0.55
 
     ## calculating pseudocarbonate value
-    carbonate = (d18O if d18O != -1 else a2 * SSS)
+    carbonate = a1 * SST + (d18O if d18O != -1 else a2 * SSS)
     return carbonate
 
 ## finding the years that are in both datasets
-intersect = set(sodaAnnualAnoms['year']).intersection(set(d18OAnoms['year']))
+intersect = set(sodaExpertAnoms['year']).intersection(set(d18OAnoms['year']))
 
 ## only keeping the overlapping years
-sodaFiltered = sodaAnnualAnoms[sodaAnnualAnoms['year'].isin(intersect)]
+sodaFiltered = sodaExpertAnoms[sodaExpertAnoms['year'].isin(intersect)]
 d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 
 ## merge on inner join (based on the year)

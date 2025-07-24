@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.stats import pearsonr
-from seguinPSMSODA import data
+from longIslandPSMSODA import data
 
 df = pd.DataFrame({'d18OAnoms': data['d18OAnoms'], 'pseudocarbonate': data['pseudocarbonate']}).dropna()
 

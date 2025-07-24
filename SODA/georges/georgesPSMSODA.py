@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 from georgesAnnualAnomalies import sodaAnnualAnoms
+from georgesExpertAnomalies import sodaExpertAnoms
 from georgesOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
@@ -20,10 +21,10 @@ def pseudocarbonate(lat, lon, SST, SSS, d18O=-1, species="default", data_to_use=
     return carbonate
 
 ## finding the years that are in both datasets
-intersect = set(sodaAnnualAnoms['year']).intersection(set(d18OAnoms['year']))
+intersect = set(sodaExpertAnoms['year']).intersection(set(d18OAnoms['year']))
 
 ## only keeping the overlapping years
-sodaFiltered = sodaAnnualAnoms[sodaAnnualAnoms['year'].isin(intersect)]
+sodaFiltered = sodaExpertAnoms[sodaExpertAnoms['year'].isin(intersect)]
 d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 
 ## merge on inner join (based on the year)
@@ -59,7 +60,7 @@ plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linesty
 
 plt.xlabel('Time')
 plt.ylabel('Anomaly Value')
-plt.title('Isle Au Haut - d18O-carb and d18O-pseudo Over Time')
+plt.title('Georges Bank - d18O-carb and d18O-pseudo Over Time')
 plt.legend()
 plt.grid(True)
 

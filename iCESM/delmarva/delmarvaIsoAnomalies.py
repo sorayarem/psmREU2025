@@ -53,4 +53,4 @@ def calcSodaAnoms(iCESMTEMPFile, iCESMISOFile):
     print("Returning results.")
     return resultAnomalies
 
-iCESMAnnualAnoms = calcSodaAnoms("./iCESM/selections/tempSEGUIN.nc", "./iCESM/selections/isoSEGUIN.nc")
+iCESMAnnualAnoms = calcSodaAnoms("./iCESM/selections/tempDELMARVA.nc", "./iCESM/selections/isoDELMARVA.nc")
