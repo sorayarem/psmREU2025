@@ -47,56 +47,56 @@ isotopes = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 isotopes.to_netcdf(path = './iCESM/iCESMSalt.nc') 
 '''
 
-'''
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [285, 286] #define your range of longitudes
 ybnds = [38, 39] #define your range of latitudes
 
 delmarva = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-delmarva.to_netcdf(path = './iCESM/selections/tempDELMARVA.nc') 
+delmarva.to_netcdf(path = './iCESM/selections/isoDELMARVA.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [287, 288] #define your range of longitudes
 ybnds = [39.5, 40.5] #define your range of latitudes
 
 longisland = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-longisland.to_netcdf(path = './iCESM/selections/tempLONGISLAND.nc') 
+longisland.to_netcdf(path = './iCESM/selections/isoLONGISLAND.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [292,293] #define your range of longitudes
 ybnds = [40, 41] #define your range of latitudes
 
 georges = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-georges.to_netcdf(path = './iCESM/selections/tempGEORGES.nc') 
+georges.to_netcdf(path = './iCESM/selections/isoGEORGES.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [291, 292] #define your range of longitudes
 ybnds = [43.5, 44.5] #define your range of latitudes
 
 isleauhaut = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-isleauhaut.to_netcdf(path = './iCESM/selections/tempISLEAUHAUT.nc') 
+isleauhaut.to_netcdf(path = './iCESM/selections/isoISLEAUHAUT.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [290, 291] #define your range of longitudes
 ybnds = [43, 44] #define your range of latitudes
 
 seguin = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-seguin.to_netcdf(path = './iCESM/selections/tempSEGUIN.nc') 
+seguin.to_netcdf(path = './iCESM/selections/isoSEGUIN.nc') 
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMSalt.nc")
+ds = xr.open_dataset("./iCESM/iCESMIso.nc")
 xbnds = [292,293] #define your range of longitudes
 ybnds = [44.0,45.0] #define your range of latitudes
 
 jonesport = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-jonesport.to_netcdf(path = './iCESM/selections/saltJONESPORT.nc') 
-'''
+jonesport.to_netcdf(path = './iCESM/selections/isoJONESPORT.nc') 
+
