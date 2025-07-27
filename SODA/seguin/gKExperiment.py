@@ -38,7 +38,6 @@ d18OFiltered = d18OData[d18OData['year'].isin(intersect)]
 
 ## merge on inner join (based on the year)
 merged = pd.merge(sodaFiltered, d18OFiltered, on='year', how='inner')
-print(merged)
 
 if {'year', 'temp', 'salt'}.issubset(merged.columns):
     ## computing the pseudocarbonate for each year
@@ -63,7 +62,7 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(12, 6))
 plt.plot(data['year'], data['seguinIso'], label='seguinIso', linestyle='-', color='#008080')
 plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linestyle='-', color='#D2691E')
-
+##plt.scatter(data['seguinIso'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 plt.xlabel('Time')
 plt.ylabel('Anomaly Value')
 plt.title('Seguin - d18O-carb and d18O-pseudo Over Time')
