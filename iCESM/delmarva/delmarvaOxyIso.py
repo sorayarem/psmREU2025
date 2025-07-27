@@ -13,6 +13,7 @@ def calcOxyIsoAnoms(d18ORaw):
   d18ORaw["d18OAnoms"] = d18ORaw["delmarvaIso"] - d18OAvg
   return d18ORaw[["year", "d18OAnoms"]]
 
+## returning the trimmed raw data
 def processFile(d18ORaw):
   ## loading the data
   d18ORaw = pd.read_csv(d18ORaw)

@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
-from jonesportOxyIso import d18OData
+from isleOxyIso import d18OData
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
@@ -30,8 +30,8 @@ def pseudocarbonate(SST, SSS):
     return carbonate
 
 ## loading in the data
-dsTemp = xr.open_dataset("./iCESM/selections/tempJONESPORT.nc")
-dsSaline = xr.open_dataset("./iCESM/selections/saltJONESPORT.nc")
+dsTemp = xr.open_dataset("./iCESM/selections/tempISLEAUHAUT.nc")
+dsSaline = xr.open_dataset("./iCESM/selections/saltISLEAUHAUT.nc")
 
 ## getting just the month and year
 print("Extracting month and year...")
@@ -92,7 +92,7 @@ if season:
     vikingFiltered = vikingFiltered.rename({'expertYear': 'year'})
 
 d18OXRArray = xr.DataArray(
-    d18OFiltered['jonesportIso'].values,
+    d18OFiltered['isleAuHautIso'].values,
     coords={'year': d18OFiltered['year'].values},
     dims='year',
     name='d18OData'
@@ -130,7 +130,7 @@ plt.ylabel('Value')
 ## plotting the correlation
 ##plt.scatter(data['d18OData'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 
-plt.suptitle('Jonesport', fontsize = 16, fontweight = 'bold')
+plt.suptitle('Isle Au Haut', fontsize = 16, fontweight = 'bold')
 method = "Grossman and Ku Method (Expert Season)" if season else "Grossman and Ku Method (Annual Season)"
 model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
 plt.title(method + " | " + model)
@@ -146,8 +146,6 @@ filter = df.dropna(subset=['observed', 'pseudocarb'])
 observed = filter['observed']
 pseudocarb = filter['pseudocarb']
 years = filter['year']
-
-print(filter)
 
 ## finding correlation coefficient (r) and the p-value
 r, sig, pValue = corr_isopersist(observed, pseudocarb)
