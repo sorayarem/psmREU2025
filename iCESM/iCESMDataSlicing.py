@@ -44,11 +44,11 @@ def cut_latlon_box(field,lon,lat,lon_bnds,lat_bnds,drop=True,coords='2D'):
 xbnds = [284,296] #define your range of longitudes
 ybnds = [36.0,45.0] #define your range of latitudes
 isotopes = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
-isotopes.to_netcdf(path = './iCESM/iCESMSalt.nc') 
+isotopes.to_netcdf(path = './iCESM/data/iCESMSalt.nc') 
 '''
 
 
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [285, 286] #define your range of longitudes
 ybnds = [38, 39] #define your range of latitudes
 
@@ -57,7 +57,7 @@ delmarva.to_netcdf(path = './iCESM/selections/isoDELMARVA.nc')
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [287, 288] #define your range of longitudes
 ybnds = [39.5, 40.5] #define your range of latitudes
 
@@ -66,7 +66,7 @@ longisland.to_netcdf(path = './iCESM/selections/isoLONGISLAND.nc')
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [292,293] #define your range of longitudes
 ybnds = [40, 41] #define your range of latitudes
 
@@ -75,7 +75,7 @@ georges.to_netcdf(path = './iCESM/selections/isoGEORGES.nc')
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [291, 292] #define your range of longitudes
 ybnds = [43.5, 44.5] #define your range of latitudes
 
@@ -84,7 +84,7 @@ isleauhaut.to_netcdf(path = './iCESM/selections/isoISLEAUHAUT.nc')
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [290, 291] #define your range of longitudes
 ybnds = [43, 44] #define your range of latitudes
 
@@ -93,7 +93,7 @@ seguin.to_netcdf(path = './iCESM/selections/isoSEGUIN.nc')
 '''
 
 '''
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [292,293] #define your range of longitudes
 ybnds = [44.0,45.0] #define your range of latitudes
 

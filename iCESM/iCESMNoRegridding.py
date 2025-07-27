@@ -29,7 +29,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-ds = xr.open_dataset("./iCESM/iCESMIso.nc")
+ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 ## ds = ds['R18O']
 
 def mean_weighted(self, dim=None, weights=None):

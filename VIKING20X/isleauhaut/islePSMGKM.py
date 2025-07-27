@@ -155,17 +155,9 @@ print("Correlation:", r)
 print("p-value:", pValue)
 
 ## finding root mean squared error
-rmse = np.sqrt(((data['d18OData'] - data['pseudocarbonate']) ** 2).mean())
+rmse = np.sqrt(((filter['observed'] - filter['pseudocarb']) ** 2).mean())
 print("RMSE:", rmse.item())
 
 ## finding null-model root mean squared error
-nrmse = np.sqrt(((0 - data['pseudocarbonate']) ** 2).mean())
+nrmse = np.sqrt(((0 - filter['pseudocarb']) ** 2).mean())
 print("NRMSE:", nrmse.item())
-
-## finding the effective degrees of freedom
-rA = ar1_fit(observed, years)
-rB = ar1_fit(pseudocarb, years)
-dT = ((1+rA*rB)/(1-rA*rB))
-nEff = (data['d18OData'].shape)/dT
-print("N-eff:", nEff)
-print("df Used:", min(nEff, data['d18OData'].shape[0] - 1))

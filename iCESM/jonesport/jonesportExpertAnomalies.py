@@ -41,7 +41,6 @@ def calcSodaAnoms(iCESMTEMPFile, iCESMSALINEFile):
     monthlyMeansTemp =  dsTemp['TEMP'].groupby('month').mean('time')
     monthlyMeansSaline =  dsSaline['SALT'].groupby('month').mean('time')
 
-
     print("Calculating anomalies...")
     tempAnomalies = iCESMAnomTemp - monthlyMeansTemp
     saltAnomalies = iCESMAnomSaline - monthlyMeansSaline
