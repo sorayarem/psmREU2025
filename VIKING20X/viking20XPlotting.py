@@ -30,7 +30,7 @@ warnings.filterwarnings("ignore")
 
 
 from brokenaxes import brokenaxes
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
 temp_ave = ds.mean('time_counter')
 
 ##select all areas where temperature does not equal 0 (temperature equals 0 on land in VIKING20X so this is essentially getting all ocean data)

@@ -33,7 +33,7 @@ def cut_latlon_box(field,lon,lat,lon_bnds,lat_bnds,drop=True,coords='2D'):
         return ds
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
 xbnds = [-74.15, -74.05] #define your range of longitudes
 ybnds = [38.15, 38.25] #define your range of latitudes
 
@@ -42,7 +42,7 @@ delmarva.to_netcdf(path = './VIKING20X/selections/tempDELMARVA.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingSALT.nc")
 xbnds = [-73.05, -72.95] #define your range of longitudes
 ybnds = [40.05, 40.15] #define your range of latitudes
 
@@ -51,7 +51,7 @@ longisland.to_netcdf(path = './VIKING20X/selections/saltLONGISLAND.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
 xbnds = [-67.85, -67.75] #define your range of longitudes
 ybnds = [40.65, 40.75] #define your range of latitudes
 
@@ -60,7 +60,7 @@ georges.to_netcdf(path = './VIKING20X/selections/tempGEORGES.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingSALT.nc")
 xbnds = [-68.75, -68.65] #define your range of longitudes
 ybnds = [43.95, 44.05] #define your range of latitudes
 
@@ -69,7 +69,7 @@ isleauhaut.to_netcdf(path = './VIKING20X/selections/saltISLEAUHAUT.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
 xbnds = [-69.85, -69.75] #define your range of longitudes
 ybnds = [43.65, 43.75] #define your range of latitudes
 
@@ -78,7 +78,7 @@ seguin.to_netcdf(path = './VIKING20X/selections/tempSEGUIN.nc')
 '''
 
 '''
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingSALT.nc")
 xbnds = [-67.45,-67.35] #define your range of longitudes
 ybnds = [44.35,44.45] #define your range of latitudes
 
