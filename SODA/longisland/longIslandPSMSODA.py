@@ -55,8 +55,11 @@ import matplotlib.pyplot as plt
 
 
 plt.figure(figsize=(12, 6))
-plt.plot(data['year'], data['d18OAnoms'], label='d18OAnoms', linestyle='-', color='#008080')
-plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linestyle='-', color='#D2691E')
+##plt.plot(data['year'], data['d18OAnoms'], label='d18OAnoms', linestyle='-', color='#008080')
+##plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linestyle='-', color='#D2691E')
+
+plt.scatter(data['d18OAnoms'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
+
 
 plt.xlabel('Time')
 plt.ylabel('Anomaly Value')

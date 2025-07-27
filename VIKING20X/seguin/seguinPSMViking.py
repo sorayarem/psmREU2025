@@ -5,6 +5,7 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 from seguinAnnualAnomalies import vikingAnnualAnoms
+from seguinExpertAnomalies import vikingExpertAnoms
 from seguinOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
@@ -21,12 +22,12 @@ def pseudocarbonate(SST, SSS, d18O=-1, species="default", data_to_use=2, verbose
     return carbonate
 
 ## finding the years that are in both datasets
-vikingYears = vikingAnnualAnoms['year']
+vikingYears = vikingExpertAnoms['year']
 d18OYears = d18OAnoms['year']
 
 intersect = np.intersect1d(vikingYears, d18OYears)
 
-vikingFiltered = vikingAnnualAnoms.sel(year = intersect)
+vikingFiltered = vikingExpertAnoms.sel(year = intersect)
 d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 
 d18OXRArray = xr.DataArray(

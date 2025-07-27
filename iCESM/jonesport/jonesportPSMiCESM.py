@@ -5,6 +5,7 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 from jonesportAnnualAnomalies import iCESMAnnualAnoms
+from jonesportExpertAnomalies import iCESMExpertAnoms
 from jonesportOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
@@ -21,12 +22,12 @@ def pseudocarbonate(SST, SSS, d18O=-1, species="default", data_to_use=2, verbose
     return carbonate
 
 ## finding the years that are in both datasets
-iCESMYears = iCESMAnnualAnoms['year']
+iCESMYears = iCESMExpertAnoms['year']
 d18OYears = d18OAnoms['year']
 
 intersect = np.intersect1d(iCESMYears, d18OYears)
 
-iCESMFiltered = iCESMAnnualAnoms.sel(year = intersect)
+iCESMFiltered = iCESMExpertAnoms.sel(year = intersect)
 d18OFiltered = d18OAnoms[d18OAnoms['year'].isin(intersect)]
 
 d18OXRArray = xr.DataArray(

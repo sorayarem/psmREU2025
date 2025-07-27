@@ -5,6 +5,7 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 from longIslandAnnualAnomalies import iCESMAnnualAnoms
+from longIslandExpertAnomalies import iCESMExpertAnoms
 from longIslandOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')

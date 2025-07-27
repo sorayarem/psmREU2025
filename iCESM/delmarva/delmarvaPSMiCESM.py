@@ -5,6 +5,7 @@ import pandas as pd
 import xarray as xr
 import numpy as np
 from delmarvaAnnualAnomalies import iCESMAnnualAnoms
+from delmarvaExpertAnomalies import iCESMExpertAnoms
 from delmarvaOxyIso import d18OAnoms
 
 latVector = pd.read_csv('./map_data/latitudes.csv')
@@ -17,7 +18,7 @@ def pseudocarbonate(SST, SSS, d18O=-1, species="default", data_to_use=2, verbose
     a2 = 0.97002 * 0.55
 
     ## calculating pseudocarbonate value
-    carbonate = a1 * SST + (d18O if d18O != -1 else a2 * SSS)
+    carbonate = a1*SST ##+ (d18O if d18O != -1 else a2 * SSS)
     return carbonate
 
 ## finding the years that are in both datasets
@@ -63,8 +64,9 @@ plt.figure(figsize=(12, 6))
 plt.plot(data['year'], data['d18OAnoms'], label='d18OAnoms', linestyle='-', color='#008080')
 plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linestyle='-', color='#D2691E')
 
-plt.xlabel('Time')
-plt.ylabel('Anomaly Value')
+##plt.scatter(data['d18OAnoms'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
+plt.xlabel('Observed')
+plt.ylabel('Pseudocarbonate')
 plt.title('Delmarva Shelf- d18O-carb and d18O-pseudo Over Time')
 plt.legend()
 plt.grid(True)

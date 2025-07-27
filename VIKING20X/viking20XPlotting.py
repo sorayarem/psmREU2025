@@ -30,30 +30,8 @@ warnings.filterwarnings("ignore")
 
 
 from brokenaxes import brokenaxes
-ds = xr.open_dataset("1_VIKING20X.L46-KFS003_1m_19710101_19711231_votemper_45W_80W_30N_57N_upper1000m.nc")
-
-def mean_weighted(self, dim=None, weights=None):
-    if weights is None:
-        return self.mean(dim)
-    else:
-        return (self * weights.values).sum(dim,skipna=True) / weights.sum(dim,skipna=True)
-
-def cut_latlon_box(field,lon,lat,lon_bnds,lat_bnds,drop=True,coords='2D'):
-        # ### cut data for box
-        if coords=='2D':
-            ds = field.where((lon_bnds[0] < lon) & (lon < lon_bnds[1])
-                     & (lat_bnds[0] < lat) & (lat < lat_bnds[1]), drop=drop)
-            # because we have 2D coordinates we have to use the command where, otherwise we could use the
-            # sel & slice commands from xarray
-        elif coords=='1D':
-            ds = field.sel(lon=slice(*lon_bnds),lat=slice(*lat_bnds),drop=drop)
-        return ds
-
-xbnds = [-76.1,-64.0] #define your range of longitudes
-ybnds = [36.0,45.0] #define your range of latitudes
-temp_ave = cut_latlon_box(ds,ds.nav_lon,ds.nav_lat,xbnds,ybnds,drop=True)
-temp_ave = temp_ave.mean('time_counter')
-target_depth = temp_ave['votemper'].sel(deptht = 38, method = 'nearest')
+ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
+temp_ave = ds.mean('time_counter')
 
 ##select all areas where temperature does not equal 0 (temperature equals 0 on land in VIKING20X so this is essentially getting all ocean data)
 
@@ -65,11 +43,7 @@ yearly_alldepths_backfilled = yearly_alldepths_NaN['votemper'].ffill('deptht', l
 
 ##here, we’re just selecting the very bottom depth in the model because we have forwardfilled the dataframe so that all of the temperatures values at the bottom depth of 1136 meters will be the temperature value of the actual seafloor at that location##
 
-yearly_alldepths_bottom = yearly_alldepths_backfilled.sel(deptht=1136.922)
-
-# cut temp field
-
-compare = yearly_alldepths_bottom - target_depth
+yearly_alldepths_bottom = yearly_alldepths_backfilled.sel(deptht=1136.922, method = "nearest")
 
 #create figure
 fig, ax1 = plt.subplots(figsize=(10,10))
@@ -96,7 +70,7 @@ ax1.set_ylim([36, 45])
 
 temp_ave
 #plotting the data, including lon, lat, trends (the actual data in this case), vmin and vmax define the upper and lower limits of your colorbar, 'cmo_balance' comes from a matplotlib python package
-decade_trend_map = ax1.pcolormesh(compare.nav_lon, compare.nav_lat, compare, vmin=-7,vmax=7, cmap = plt.get_cmap('cmo.balance'))
+decade_trend_map = ax1.pcolormesh(yearly_alldepths_bottom.nav_lon, yearly_alldepths_bottom.nav_lat, yearly_alldepths_bottom, vmin=4,vmax=16, cmap = plt.get_cmap('cmo.balance'))
 
 #plotting the color bar
 fig.colorbar(decade_trend_map, orientation='vertical', label='Bottom Temperature Trend ($^\circ$C/decade)', shrink = 0.4)
