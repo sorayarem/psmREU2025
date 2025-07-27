@@ -54,9 +54,9 @@ def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
     
     ## averaging over space and selecting a specific depth
     spatialMeanAnomsTemp = tempAnomalies.mean(dim=['y', 'x'])
-    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(deptht = 80, method = 'nearest')
+    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(deptht = 0, method = 'nearest')
     spatialMeanAnomsSaline = saltAnomalies.mean(dim=['y', 'x'])
-    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(deptht = 80, method = 'nearest')
+    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(deptht = 0, method = 'nearest')
 
     ## getting the mean for each overall year
     print("Computing expert anomalies...")
