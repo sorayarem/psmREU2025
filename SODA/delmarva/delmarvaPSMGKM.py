@@ -4,7 +4,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from jonesportOxyIso import d18OData
+from delmarvaOxyIso import d18OData
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
@@ -29,7 +29,7 @@ def pseudocarbonate(SST, SSS):
     return carbonate
 
 ## loading in the data
-sodaRaw = pd.read_csv("./csv_clean/jonesportCSV.csv")
+sodaRaw = pd.read_csv("./csv_clean/delmarvaCSV.csv")
 
 ## converting from string to date-time object and to expert season
 print("Converting time column...")
@@ -88,15 +88,15 @@ else:
 plt.figure(figsize=(12, 6))
 
 ## plotting the timeseries
-plt.plot(data['year'], data['jonesportIso'], label='shell record', linestyle='-', color='#008080')
+plt.plot(data['year'], data['delmarvaIso'], label='shell record', linestyle='-', color='#008080')
 plt.plot(data['year'], data['pseudocarbonate'], label='pseudocarbonate', linestyle='-', color='#D2691E')
 plt.xlabel('Year')
 plt.ylabel('Value')
 
 ## plotting the correlation
-##plt.scatter(data['jonesportIso'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
+##plt.scatter(data['delmarvaIso'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 
-plt.suptitle('Jonesport', fontsize = 16, fontweight = 'bold')
+plt.suptitle('Delmarva Shelf', fontsize = 16, fontweight = 'bold')
 method = "Grossman and Ku Method (Expert Season)" if season else "Grossman and Ku Method (Annual Season)"
 model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
 plt.title(method + " | " + model)
@@ -105,7 +105,7 @@ plt.grid(True)
 plt.show()
 
 # creating the merged data frame
-df = pd.DataFrame({ 'year': data['year'], 'observed': data['jonesportIso'], 'pseudocarb': data['pseudocarbonate']})
+df = pd.DataFrame({ 'year': data['year'], 'observed': data['delmarvaIso'], 'pseudocarb': data['pseudocarbonate']})
 
 # dropping rows where either observed or pseudocarb is n/a
 filter = df.dropna(subset=['observed', 'pseudocarb'])
@@ -119,20 +119,20 @@ print("Correlation:", r)
 print("p-value:", pValue)
 
 ## finding root mean squared error
-rmse = np.sqrt(((data['jonesportIso'] - data['pseudocarbonate']) ** 2).mean())
+rmse = np.sqrt(((data['delmarvaIso'] - data['pseudocarbonate']) ** 2).mean())
 print("RMSE:", rmse)
 
 ## finding null-model root mean squared error
-nrmse = np.sqrt(((data['jonesportIso'] - 0) ** 2).mean())
+nrmse = np.sqrt(((data['delmarvaIso'] - 0) ** 2).mean())
 print("NRMSE:", nrmse)
 
 ## finding the effective degrees of freedom
 rA = ar1_fit(observed, years)
 rB = ar1_fit(pseudocarb, years)
 dT = ((1+rA*rB)/(1-rA*rB))
-nEff = (data['jonesportIso'].shape)/dT
+nEff = (data['delmarvaIso'].shape)/dT
 print("N-eff:", nEff)
-print("df Used:", min(nEff, data['jonesportIso'].shape[0] - 1))
+print("df Used:", min(nEff, data['delmarvaIso'].shape[0] - 1))
 
 
 

@@ -4,9 +4,9 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from jonesportOxyIso import d18OAnoms
-from jonesportAnnualAnomalies import sodaAnnualAnoms
-from jonesportExpertAnomalies import sodaExpertAnoms
+from georgesOxyIso import d18OAnoms
+from georgesAnnualAnomalies import sodaAnnualAnoms
+from georgesExpertAnomalies import sodaExpertAnoms
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
@@ -63,7 +63,7 @@ plt.ylabel('Anomaly Value')
 ## plotting the correlation
 ##plt.scatter(data['d18OAnoms'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 
-plt.suptitle('Jonesport', fontsize = 16, fontweight = 'bold')
+plt.suptitle('Georges Bank', fontsize = 16, fontweight = 'bold')
 method = "Williams et al. Method (Expert Season)" if season else "Williams et al. Method (Annual Season)"
 model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
 plt.title(method + " | " + model)
