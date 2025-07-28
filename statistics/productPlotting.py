@@ -21,8 +21,9 @@ sodaDaily = soda.groupby(['time', 'month'], as_index=False).agg({'temp': 'mean',
 print("Computing monthly means...")
 sodaMonthly = sodaDaily.groupby('month', as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
 
-ds = xr.open_dataset("./iCESM/iCESMTemp.nc")
-iCESM = ds.mean(dim=['z_t', 'nlat', 'nlon'])
+ds = xr.open_dataset("./iCESM/data/iCESMTemp.nc")
+iCESM = ds.mean(dim=['nlat', 'nlon'])
+iCESM = iCESM.sel(z_t = 0, method = 'nearest')
 
 ## getting just the month and year
 print("Extracting month and year...")
@@ -34,8 +35,9 @@ iCESM = iCESM.assign_coords(year=iCESM['time'].dt.year,month=iCESM['time'].dt.mo
 print("Computing monthly means...")
 iCESMMonthly =  iCESM['TEMP'].groupby('month').mean('time')
 
-ds = xr.open_dataset("./VIKING20X/vikingTEMP.nc")
-viking = ds.mean(dim=['deptht', 'y', 'x'])
+ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
+viking = ds.mean(dim=['y', 'x'])
+viking = viking.sel(deptht = 0, method = 'nearest')
 
 ## getting just the month and year
 print("Extracting month and year...")
@@ -63,8 +65,9 @@ plt.grid(True)
 # showing the graph
 plt.show()
 
-ds = xr.open_dataset("./iCESM/iCESMSalt.nc")
-iCESM = ds.mean(dim=['z_t', 'nlat', 'nlon'])
+ds = xr.open_dataset("./iCESM/data/iCESMSalt.nc")
+iCESM = ds.mean(dim=['nlat', 'nlon'])
+iCESM = iCESM.sel(z_t = 0, method = 'nearest')
 
 ## getting just the month and year
 print("Extracting month and year...")
@@ -76,8 +79,9 @@ iCESM = iCESM.assign_coords(year=iCESM['time'].dt.year,month=iCESM['time'].dt.mo
 print("Computing monthly means...")
 iCESMMonthly =  iCESM['SALT'].groupby('month').mean('time')
 
-ds = xr.open_dataset("./VIKING20X/vikingSALT.nc")
-viking = ds.mean(dim=['deptht', 'y', 'x'])
+ds = xr.open_dataset("./VIKING20X/data/vikingSALT.nc")
+viking = ds.mean(dim=['y', 'x'])
+viking = viking.sel(deptht = 0, method = 'nearest')
 
 ## getting just the month and year
 print("Extracting month and year...")

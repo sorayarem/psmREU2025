@@ -1,17 +1,19 @@
 ## code modified from branwen williams' 
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from seguinOxyIso import d18OAnoms
 from seguinAnnualAnomalies import sodaAnnualAnoms
 from seguinExpertAnomalies import sodaExpertAnoms
+from openpyxl import load_workbook
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
 ## setting the seasonal preference (F:Annual; T:Expert)
-season = True
+season = 1
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
 model = 3
@@ -65,8 +67,8 @@ plt.ylabel('Anomaly Value')
 
 plt.suptitle('Seguin', fontsize = 16, fontweight = 'bold')
 method = "Williams et al. Method (Expert Season)" if season else "Williams et al. Method (Annual Season)"
-model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
-plt.title(method + " | " + model)
+modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
+plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
 plt.show()
@@ -93,7 +95,48 @@ print("RMSE:", rmse.item())
 nrmse = np.sqrt(((0 - filter['pseudocarb']) ** 2).mean())
 print("NRMSE:", nrmse.item())
 
+## saving the results to an excel file
+file = "psmREUStats.xlsx"
+site = "Seguin"
+equation = "WEA"
+data = "SODA"
+season = "Expert" if season else "Annual"
+method = "Both" if model == 3 else ("Temperature" if model == 1 else "Salinity")
 
+modelResults = {'Site': site, 'Data': data,'Season': season, 'Method': method, 'Equation': equation}
+
+modelResults['r'] = r
+modelResults['p-value'] = pValue
+modelResults['RMSE'] = rmse.item()
+modelResults['NRMSE'] = nrmse.item()
+
+rowToAdd = pd.DataFrame([modelResults])
+
+if os.path.exists(file):
+    ## loading the excel file
+    previousDF = pd.read_excel(file)
+
+    ## checking if the same row already exists
+    match = ((previousDF['Site'] == site) & (previousDF['Data'] == data) & (previousDF['Season'] == season) & 
+                (previousDF['Method'] == method) & (previousDF['Equation'] == equation))
+
+    if match.any():
+        ## replacing the existing row
+        previousDF.loc[match, :] = rowToAdd.values[0]
+        print("Row already exists, overwriting file...")
+    else:
+        ## adding the new row
+        previousDF = pd.concat([previousDF, rowToAdd], ignore_index=True)
+        print("Row doesn't exist, adding...")
+
+    ## saving the changes to excel
+    with pd.ExcelWriter(file, engine='openpyxl', mode='w') as writer:
+        previousDF.to_excel(writer, index=False)
+else:
+    ## creating a new file
+    rowToAdd.to_excel(file, index=False, engine='openpyxl')
+
+print("Row added!")
 
 
 
