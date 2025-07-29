@@ -1,10 +1,12 @@
 ## code modified from branwen williams' 
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
+import os
 import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
+from openpyxl import load_workbook
 from isleOxyIso import d18OAnoms
 from isleAnnualAnomalies import vikingAnnualAnoms
 from isleExpertAnomalies import vikingExpertAnoms
@@ -78,8 +80,8 @@ plt.ylabel('Anomaly Value')
 
 plt.suptitle('Isle Au Haut', fontsize = 16, fontweight = 'bold')
 method = "Williams et al. Method (Expert Season)" if season else "Williams et al. Method (Annual Season)"
-model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
-plt.title(method + " | " + model)
+modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
+plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
 plt.show()

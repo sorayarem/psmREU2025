@@ -21,13 +21,13 @@ def getExpertYear(time):
     return time.year + int(time.month >= 10)
 
 ## building the pseudocarbonate
-def pseudocarbonate(SST, SSS):
+def pseudocarbonate(SST, SSS, avgTemp, avgSalt):
     ## using the grossman and ku equation (specific to the gulf of maine)
-    temp = SST
-    sw = (0.5 * SSS -17.3)
+    temp = avgTemp if model == 2 else SST
+    sw = (0.5 * avgSalt -17.3) if model == 1 else (0.5 * SSS -17.3)
 
     ## calculating pseudocarbonate value
-    carbonate = ((20.6 - temp)/4.34) + (sw - 0.27) if model == 3 else (((20.6 - temp)/4.34) - 0.27) if model == 1 else ((20.6/4.34) + (sw - 0.27))
+    carbonate = ((20.6 - temp)/4.34) + (sw - 0.27)
     return carbonate
 
 ## loading in the data
@@ -47,6 +47,12 @@ sodaRaw['year'] = sodaRaw['time'].dt.year
 print("Computing annual means...")
 sodaRawAnnual = sodaRaw.groupby('year', as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
 sodaRawExpert = sodaRaw.groupby('expertYear', as_index=False).agg({'temp': 'mean', 'salt': 'mean'})
+
+sodaRawAnnual['avgTemp'] = sodaRawAnnual['temp'].mean()
+sodaRawExpert['avgTemp'] = sodaRawExpert['temp'].mean()
+
+sodaRawAnnual['avgSalt'] = sodaRawAnnual['salt'].mean()
+sodaRawExpert['avgSalt'] = sodaRawExpert['salt'].mean()
 
 ## removing the first and last years from the dataset
 yearsValid = sodaRawExpert['expertYear'].iloc[1:-1]
@@ -72,12 +78,15 @@ mergedExpert = pd.merge(sodaFilteredExpert, d18OFilteredExpert, left_on='expertY
 merged = mergedExpert if season else mergedAnnual
 
 ## computing the pseudocarbonate for each year
-if {'year', 'temp', 'salt'}.issubset(merged.columns):
+if {'year', 'temp', 'salt', 'avgTemp', 'avgSalt'}.issubset(merged.columns):
     pseudocarbonateData = []
+
     for _, row in merged.iterrows():
         pseudoCarbonateValue = pseudocarbonate(
             SST=row['temp'],
-            SSS=row['salt'])
+            SSS=row['salt'],
+            avgTemp=row['avgTemp'],
+            avgSalt=row['avgSalt'])
         pseudocarbonateData.append(pseudoCarbonateValue)
 
     ## converting to a data frame
@@ -170,5 +179,8 @@ else:
     rowToAdd.to_excel(file, index=False, engine='openpyxl')
 
 print("Row added!")
+
+
+
 
 

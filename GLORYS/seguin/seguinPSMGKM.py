@@ -10,7 +10,7 @@ from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
 ## setting the seasonal preference (F:Annual; T:Expert)
-season = False
+season = True
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
 model = 3

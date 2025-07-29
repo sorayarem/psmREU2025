@@ -1,6 +1,7 @@
 ## code modified from branwen williams' 
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
+import os
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -8,6 +9,7 @@ import matplotlib.pyplot as plt
 from longIslandOxyIso import d18OAnoms
 from longIslandAnnualAnomalies import vikingAnnualAnoms
 from longIslandExpertAnomalies import vikingExpertAnoms
+from openpyxl import load_workbook
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
@@ -78,8 +80,8 @@ plt.ylabel('Anomaly Value')
 
 plt.suptitle('Long Island', fontsize = 16, fontweight = 'bold')
 method = "Williams et al. Method (Expert Season)" if season else "Williams et al. Method (Annual Season)"
-model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
-plt.title(method + " | " + model)
+modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
+plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
 plt.show()

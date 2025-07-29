@@ -1,10 +1,12 @@
 ## code modified from branwen williams' 
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
+import os
 import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
+from openpyxl import load_workbook
 from jonesportOxyIso import d18OData
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
@@ -13,7 +15,7 @@ from pyleoclim.utils.correlation import corr_isopersist
 season = True
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
-model = 3
+model = 1
 
 ## method to establish an expert season (oct-sep)
 def getExpertYear(time):
@@ -134,8 +136,8 @@ plt.ylabel('Value')
 
 plt.suptitle('Jonesport', fontsize = 16, fontweight = 'bold')
 method = "Grossman and Ku Method (Expert Season)" if season else "Grossman and Ku Method (Annual Season)"
-model = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
-plt.title(method + " | " + model)
+modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
+plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
 plt.show()

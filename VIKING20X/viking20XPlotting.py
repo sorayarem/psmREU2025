@@ -30,16 +30,16 @@ warnings.filterwarnings("ignore")
 
 
 from brokenaxes import brokenaxes
-ds = xr.open_dataset("./VIKING20X/data/vikingTEMP.nc")
+ds = xr.open_dataset("./VIKING20X/data/vikingSALT.nc")
 temp_ave = ds.mean('time_counter')
 
 ##select all areas where temperature does not equal 0 (temperature equals 0 on land in VIKING20X so this is essentially getting all ocean data)
 
-yearly_alldepths_NaN = temp_ave.where(temp_ave['votemper'] != 0.0)
+yearly_alldepths_NaN = temp_ave.where(temp_ave['vosaline'] != 0.0)
 
 ##The ffill() function stands for forward fill. This function fills missing values (NaNs) by propagating the last valid (non-NaN) value forward (in other words to deeper depths in this case because we have specified ‘deptht’ in the .ffill function). Because values at depth below the seafloor show up as NaNs, this means that it is filling in those values below the sea floor for a given area with the last actual data value at that location i.e., the temperature value at the seafloor##
 
-yearly_alldepths_backfilled = yearly_alldepths_NaN['votemper'].ffill('deptht', limit=None)
+yearly_alldepths_backfilled = yearly_alldepths_NaN['vosaline'].ffill('deptht', limit=None)
 
 ##here, we’re just selecting the very bottom depth in the model because we have forwardfilled the dataframe so that all of the temperatures values at the bottom depth of 1136 meters will be the temperature value of the actual seafloor at that location##
 
@@ -70,10 +70,10 @@ ax1.set_ylim([36, 45])
 
 temp_ave
 #plotting the data, including lon, lat, trends (the actual data in this case), vmin and vmax define the upper and lower limits of your colorbar, 'cmo_balance' comes from a matplotlib python package
-decade_trend_map = ax1.pcolormesh(yearly_alldepths_bottom.nav_lon, yearly_alldepths_bottom.nav_lat, yearly_alldepths_bottom, vmin=4,vmax=16, cmap = plt.get_cmap('cmo.balance'))
+decade_trend_map = ax1.pcolormesh(yearly_alldepths_bottom.nav_lon, yearly_alldepths_bottom.nav_lat, yearly_alldepths_bottom, vmin=20,vmax=35, cmap = plt.get_cmap('cmo.haline'))
 
 #plotting the color bar
-fig.colorbar(decade_trend_map, orientation='vertical', label='Bottom Temperature Trend ($^\circ$C/decade)', shrink = 0.4)
+fig.colorbar(decade_trend_map, orientation='vertical', label='Bottom Salinity', shrink = 0.4)
 
 GeorgesBank = ax1.plot([-67.805333], [40.727667],
          color='yellow', marker='o', markeredgecolor = 'yellow', markeredgewidth = 2, markersize = 5,linestyle = 'None',zorder = 103
