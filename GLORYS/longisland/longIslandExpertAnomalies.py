@@ -54,9 +54,9 @@ def calcSodaAnoms(glorysTEMPFile, glorysSALINEFile):
     
     ## averaging over space and selecting a specific depth
     spatialMeanAnomsTemp = tempAnomalies.mean(dim=['latitude', 'longitude'])
-    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(depth = 0, method = 'nearest')
+    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(depth = 48, method = 'nearest')
     spatialMeanAnomsSaline = saltAnomalies.mean(dim=['latitude', 'longitude'])
-    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(depth = 0, method = 'nearest')
+    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(depth = 48, method = 'nearest')
 
     ## getting the mean for each overall year
     print("Computing expert anomalies...")
