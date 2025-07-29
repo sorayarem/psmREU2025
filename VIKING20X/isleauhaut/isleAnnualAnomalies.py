@@ -12,6 +12,12 @@ def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
     print("Loading file...")
     dsTemp = xr.open_dataset(vikingTEMPFile)
     dsSaline = xr.open_dataset(vikingSALINEFile)
+
+    ## fixing the 0.0 values with forward fill
+    dsTemp = dsTemp.where(dsTemp['votemper'] != 0.0)
+    dsTemp['votemper'] = dsTemp['votemper'].ffill('deptht', limit=None)
+    dsSaline = dsSaline.where(dsSaline['vosaline'] != 0.0)
+    dsSaline['vosaline'] = dsSaline['vosaline'].ffill('deptht', limit=None)
     
     ## getting just the month and year
     print("Extracting month and year...")
@@ -42,9 +48,9 @@ def calcSodaAnoms(vikingTEMPFile, vikingSALINEFile):
 
     ## averaging over space and selecting a specific depth
     spatialMeanAnomsTemp = tempAnomalies.mean(dim=['y', 'x'])
-    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(deptht = 80, method = 'nearest')
+    spatialMeanAnomsTemp = spatialMeanAnomsTemp.sel(deptht = 1136.922, method = 'nearest')
     spatialMeanAnomsSaline = saltAnomalies.mean(dim=['y', 'x'])
-    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(deptht = 80, method = 'nearest')
+    spatialMeanAnomsSaline = spatialMeanAnomsSaline.sel(deptht = 1136.922, method = 'nearest')
 
     ## getting the mean for each overall year
     print("Computing annual anomalies...")

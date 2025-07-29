@@ -12,7 +12,7 @@ from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
 ## setting the seasonal preference (F:Annual; T:Expert)
-season = False
+season = 1
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
 model = 3
@@ -23,18 +23,22 @@ def getExpertYear(time):
     return time.year + int(time.month >= 10)
 
 ## building the pseudocarbonate
-def pseudocarbonate(SST, SSS):
+def pseudocarbonate(SST, SSS, avgTemp, avgSalt):
     ## using the grossman and ku equation (specific to the gulf of maine)
-    temp = SST
-    sw = (0.5 * SSS -17.3)
+    temp = avgTemp if model == 2 else SST
+    sw = (0.5 * avgSalt -17.3) if model == 1 else (0.5 * SSS -17.3)
 
     ## calculating pseudocarbonate value
-    carbonate = ((20.6 - temp)/4.34) + (sw - 0.27) if model == 3 else (((20.6 - temp)/4.34) - 0.27) if model == 1 else ((20.6/4.34) + (sw - 0.27))
+    carbonate = ((20.6 - temp)/4.34) + (sw - 0.27)
     return carbonate
 
 ## loading in the data
 dsTemp = xr.open_dataset("./VIKING20X/selections/tempISLEAUHAUT.nc")
+dsTemp = dsTemp.where(dsTemp['votemper'] != 0.0)
+dsTemp['votemper'] = dsTemp['votemper'].ffill('deptht', limit=None)
 dsSaline = xr.open_dataset("./VIKING20X/selections/saltISLEAUHAUT.nc")
+dsSaline = dsSaline.where(dsSaline['vosaline'] != 0.0)
+dsSaline['vosaline'] = dsSaline['vosaline'].ffill('deptht', limit=None)
 
 ## getting just the month and year
 print("Extracting month and year...")
@@ -60,9 +64,9 @@ dsSaline = dsSaline.assign_coords(month=dsSaline['time_counter'].dt.month)
 
 ## averaging over space and selecting a specific depth
 spatialMeanTemp = dsTemp.mean(dim=['y', 'x'])
-spatialMeanTemp = spatialMeanTemp.sel(deptht = 0, method = 'nearest')
+spatialMeanTemp = spatialMeanTemp.sel(deptht = 1136.922, method = 'nearest')
 spatialMeanSaline = dsSaline.mean(dim=['y', 'x'])
-spatialMeanSaline = spatialMeanSaline.sel(deptht = 0, method = 'nearest')
+spatialMeanSaline = spatialMeanSaline.sel(deptht = 1136.922, method = 'nearest')
 
 ## getting the mean for each overall year
 print("Computing means...")
@@ -82,6 +86,8 @@ print("Combining the results...")
 resultAnomalies = xr.Dataset()
 resultAnomalies['temp'] = vikingTempExpert['votemper'] if season else vikingTempAnnual['votemper']
 resultAnomalies['salt'] = vikingSalineExpert['vosaline'] if season else vikingSalineAnnual['vosaline']
+resultAnomalies['avgTemp'] = vikingTempExpert['votemper'].mean() if season else vikingTempAnnual['votemper'].mean()
+resultAnomalies['avgSalt'] = vikingSalineExpert['vosaline'].mean() if season else vikingSalineAnnual['vosaline'].mean()
 
 ## finding the years that are in both datasets
 iCESMYears = vikingTempExpert['expertYear'] if season else vikingTempAnnual['year']
@@ -107,13 +113,15 @@ merged['d18OData'] = d18OXRArray
 df = merged.to_dataframe().reset_index()
 
 ## computing the pseudocarbonate for each year
-if {'year', 'temp', 'salt'}.issubset(df.columns):
+if {'year', 'temp', 'salt', 'avgTemp', 'avgSalt'}.issubset(df.columns):
     pseudocarbonateData = []
 
     for _, row in df.iterrows():
         pseudoCarbonateValue = pseudocarbonate(
             SST=row['temp'],
-            SSS=row['salt'])
+            SSS=row['salt'],
+            avgTemp=row['avgTemp'],
+            avgSalt=row['avgSalt'])
         pseudocarbonateData.append(pseudoCarbonateValue)
 
     ## converting to a data frame
@@ -163,3 +171,46 @@ print("RMSE:", rmse.item())
 ## finding null-model root mean squared error
 nrmse = np.sqrt(((0 - filter['pseudocarb']) ** 2).mean())
 print("NRMSE:", nrmse.item())
+
+## saving the results to an excel file
+file = "psmREUStats.xlsx"
+site = "Isle Au Haut"
+equation = "GKM"
+data = "VIKING20X"
+season = "Expert" if season else "Annual"
+method = "Both" if model == 3 else ("Temperature" if model == 1 else "Salinity")
+
+modelResults = {'Site': site, 'Data': data,'Season': season, 'Method': method, 'Equation': equation}
+
+modelResults['r'] = r
+modelResults['p-value'] = pValue
+modelResults['RMSE'] = rmse.item()
+modelResults['NRMSE'] = nrmse.item()
+
+rowToAdd = pd.DataFrame([modelResults])
+
+if os.path.exists(file):
+    ## loading the excel file
+    previousDF = pd.read_excel(file)
+
+    ## checking if the same row already exists
+    match = ((previousDF['Site'] == site) & (previousDF['Data'] == data) & (previousDF['Season'] == season) & 
+                (previousDF['Method'] == method) & (previousDF['Equation'] == equation))
+
+    if match.any():
+        ## replacing the existing row
+        previousDF.loc[match, :] = rowToAdd.values[0]
+        print("Row already exists, overwriting file...")
+    else:
+        ## adding the new row
+        previousDF = pd.concat([previousDF, rowToAdd], ignore_index=True)
+        print("Row doesn't exist, adding...")
+
+    ## saving the changes to excel
+    with pd.ExcelWriter(file, engine='openpyxl', mode='w') as writer:
+        previousDF.to_excel(writer, index=False)
+else:
+    ## creating a new file
+    rowToAdd.to_excel(file, index=False, engine='openpyxl')
+
+print("Row added!")
