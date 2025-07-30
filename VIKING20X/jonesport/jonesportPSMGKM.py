@@ -2,6 +2,7 @@
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
 import os
+import argparse
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -11,11 +12,17 @@ from jonesportOxyIso import d18OData
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
+## setting up the model arugments
+parser = argparse.ArgumentParser(description='Running PSM...')
+parser.add_argument('--season', type=int, choices=[0, 1], default=0, help='Seasonal preference (0 = Annual, 1 = Expert)')
+parser.add_argument('--model', type=int, choices=[1, 2, 3], default=1, help='Model preference (1=Temp, 2=Salinity, 3=Both)')
+args = parser.parse_args()
+
 ## setting the seasonal preference (F:Annual; T:Expert)
-season = 1
+season = args.season
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
-model = 3
+model = args.model
 
 ## method to establish an expert season (oct-sep)
 def getExpertYear(time):
@@ -83,11 +90,11 @@ vikingSalineExpert = vikingSalineExpert.where(vikingSalineExpert['expertYear'].i
 
 ## combining the temperature and salinity results
 print("Combining the results...")
-resultAnomalies = xr.Dataset()
-resultAnomalies['temp'] = vikingTempExpert['votemper'] if season else vikingTempAnnual['votemper']
-resultAnomalies['salt'] = vikingSalineExpert['vosaline'] if season else vikingSalineAnnual['vosaline']
-resultAnomalies['avgTemp'] = vikingTempExpert['votemper'].mean() if season else vikingTempAnnual['votemper'].mean()
-resultAnomalies['avgSalt'] = vikingSalineExpert['vosaline'].mean() if season else vikingSalineAnnual['vosaline'].mean()
+resultValues = xr.Dataset()
+resultValues['temp'] = vikingTempExpert['votemper'] if season else vikingTempAnnual['votemper']
+resultValues['salt'] = vikingSalineExpert['vosaline'] if season else vikingSalineAnnual['vosaline']
+resultValues['avgTemp'] = vikingTempExpert['votemper'].mean() if season else vikingTempAnnual['votemper'].mean()
+resultValues['avgSalt'] = vikingSalineExpert['vosaline'].mean() if season else vikingSalineAnnual['vosaline'].mean()
 
 ## finding the years that are in both datasets
 iCESMYears = vikingTempExpert['expertYear'] if season else vikingTempAnnual['year']
@@ -95,7 +102,7 @@ d18OYears = d18OData['year']
 
 intersect = np.intersect1d(iCESMYears, d18OYears)
 
-vikingFiltered = resultAnomalies.sel(expertYear = intersect) if season else resultAnomalies.sel(year = intersect)
+vikingFiltered = resultValues.sel(expertYear = intersect) if season else resultValues.sel(year = intersect)
 d18OFiltered = d18OData[d18OData['year'].isin(intersect)]
 
 if season:
@@ -142,13 +149,17 @@ plt.ylabel('Value')
 ## plotting the correlation
 ##plt.scatter(data['d18OData'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 
+filepath = "./figures/viking"
+figname = "jonesport_VIKING20X_GKM_M" + str(model) + "_" + ("EXP" if season else "ANN") + ".png"
+filename = os.path.join(filepath, figname)
+
 plt.suptitle('Jonesport', fontsize = 16, fontweight = 'bold')
 method = "Grossman and Ku Method (Expert Season)" if season else "Grossman and Ku Method (Annual Season)"
 modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
 plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
-plt.show()
+plt.savefig(filename)
 
 # creating the merged data frame
 df = pd.DataFrame({ 'year': data['year'], 'observed': data['d18OData'], 'pseudocarb': data['pseudocarbonate']})
@@ -169,7 +180,7 @@ rmse = np.sqrt(((filter['observed'] - filter['pseudocarb']) ** 2).mean())
 print("RMSE:", rmse.item())
 
 ## finding null-model root mean squared error
-nrmse = np.sqrt(((0 - filter['pseudocarb']) ** 2).mean())
+nrmse = np.sqrt(((0 - filter['observed']) ** 2).mean())
 print("NRMSE:", nrmse.item())
 
 ## saving the results to an excel file

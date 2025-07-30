@@ -32,8 +32,13 @@ warnings.filterwarnings("ignore")
 from brokenaxes import brokenaxes
 dsTemp = xr.open_dataset("./iCESM/selections/tempJONESPORT.nc")
 dsSaline = xr.open_dataset("./iCESM/selections/saltJONESPORT.nc")
-##dsSaline = dsSaline.where(dsSaline['SALT'] != 0.0)
-    
+
+dsTemp = dsTemp.where(dsTemp['TEMP'] != 0.0)
+dsTemp['TEMP'] = dsTemp['TEMP'].ffill('z_t', limit=None)
+
+dsSaline = dsSaline.where(dsSaline['SALT'] != 0.0)
+dsSaline['SALT'] = dsSaline['SALT'].ffill('z_t', limit=None)
+   
 ## getting just the month and year
 print("Extracting month and year...")
 dsTemp['month'] = dsTemp['time'].dt.month
@@ -93,9 +98,9 @@ salts_50 = annualSalineAnoms_50['SALT'].values
 
 ## averaging over space and selecting a specific depth
 spatialMeanAnomsTemp_80 = dsTemp.mean(dim=['nlat', 'nlon'])
-spatialMeanAnomsTemp_80 = spatialMeanAnomsTemp_80.sel(z_t = 8000, method = 'nearest')
+spatialMeanAnomsTemp_80 = spatialMeanAnomsTemp_80.sel(z_t = 30000, method = 'nearest')
 spatialMeanAnomsSaline_80 = dsSaline.mean(dim=['nlat', 'nlon'])
-spatialMeanAnomsSaline_80 = spatialMeanAnomsSaline_80.sel(z_t = 8000, method = 'nearest')
+spatialMeanAnomsSaline_80 = spatialMeanAnomsSaline_80.sel(z_t = 30000, method = 'nearest')
 
 ## getting the mean for each overall year
 print("Computing annual anomalies...")
@@ -120,6 +125,8 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 '''
+
+
 
 plt.figure(figsize=(10, 5))
 plt.plot(years_0, salts_0, label='depth 0', linestyle='-', color='#008080') 

@@ -47,7 +47,7 @@ isotopes = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 isotopes.to_netcdf(path = './iCESM/data/iCESMSalt.nc') 
 '''
 
-
+'''
 ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [285, 286] #define your range of longitudes
 ybnds = [38, 39] #define your range of latitudes
@@ -74,14 +74,14 @@ georges = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 georges.to_netcdf(path = './iCESM/selections/isoGEORGES.nc') 
 '''
 
-'''
+
 ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
 xbnds = [291, 292] #define your range of longitudes
-ybnds = [43.5, 44.5] #define your range of latitudes
+ybnds = [44, 44.5] #define your range of latitudes
 
 isleauhaut = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 isleauhaut.to_netcdf(path = './iCESM/selections/isoISLEAUHAUT.nc') 
-'''
+
 
 '''
 ds = xr.open_dataset("./iCESM/data/iCESMIso.nc")
@@ -99,4 +99,4 @@ ybnds = [44.0,45.0] #define your range of latitudes
 
 jonesport = cut_latlon_box(ds,ds.TLONG,ds.TLAT,xbnds,ybnds,drop=True)
 jonesport.to_netcdf(path = './iCESM/selections/isoJONESPORT.nc') 
-
+'''

@@ -28,10 +28,10 @@ import cartopy   # package to plot maps
 import warnings
 warnings.filterwarnings("ignore")
 
-ds = xr.open_dataset("./iCESM/selections/tempDELMARVA.nc")
+ds = xr.open_dataset("./iCESM/selections/saltISLEAUHAUT.nc")
 temp_ave = ds.mean('time')
 temp_ave = temp_ave.mean('z_t')
-temp_ave = temp_ave['TEMP']
+temp_ave = temp_ave['SALT']
 
 #create figure
 fig, ax1 = plt.subplots(figsize=(10,10))

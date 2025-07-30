@@ -2,6 +2,7 @@
 ## marine calcifier psm (2024)
 ## developed by soraya remaili
 import os
+import argparse
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -13,11 +14,17 @@ from isleExpertAnomalies import vikingExpertAnoms
 from pyleoclim.utils.tsmodel import ar1_fit
 from pyleoclim.utils.correlation import corr_isopersist
 
+## setting up the model arugments
+parser = argparse.ArgumentParser(description='Running PSM...')
+parser.add_argument('--season', type=int, choices=[0, 1], default=0, help='Seasonal preference (0 = Annual, 1 = Expert)')
+parser.add_argument('--model', type=int, choices=[1, 2, 3], default=1, help='Model preference (1=Temp, 2=Salinity, 3=Both)')
+args = parser.parse_args()
+
 ## setting the seasonal preference (F:Annual; T:Expert)
-season = 1
+season = args.season
 
 ## setting the model preference (1: Temperature; 2:Salinity, 3:Both)
-model = 3
+model = args.model
 
 ## building the pseudocarbonate
 def pseudocarbonate(SST, SSS):
@@ -78,13 +85,17 @@ plt.ylabel('Anomaly Value')
 ## plotting the correlation
 ##plt.scatter(data['d18OAnoms'], data['pseudocarbonate'], label='d18OAnoms', color='#008080')
 
+filepath = "./figures/viking"
+figname = "isle_VIKING20X_WEA_M" + str(model) + "_" + ("EXP" if season else "ANN") + ".png"
+filename = os.path.join(filepath, figname)
+
 plt.suptitle('Isle Au Haut', fontsize = 16, fontweight = 'bold')
 method = "Williams et al. Method (Expert Season)" if season else "Williams et al. Method (Annual Season)"
 modelType = "Temperature + Salinity" if model == 3 else ("Temperature Only" if model == 1 else "Salinity Only")
 plt.title(method + " | " + modelType)
 plt.legend()
 plt.grid(True)
-plt.show()
+plt.savefig(filename)
 
 # creating the merged data frame
 df = pd.DataFrame({ 'year': data['year'], 'observed': data['d18OAnoms'], 'pseudocarb': data['pseudocarbonate']})
@@ -105,7 +116,7 @@ rmse = np.sqrt(((filter['observed'] - filter['pseudocarb']) ** 2).mean())
 print("RMSE:", rmse.item())
 
 ## finding null-model root mean squared error
-nrmse = np.sqrt(((0 - filter['pseudocarb']) ** 2).mean())
+nrmse = np.sqrt(((0 - filter['observed']) ** 2).mean())
 print("NRMSE:", nrmse.item())
 
 ## saving the results to an excel file
