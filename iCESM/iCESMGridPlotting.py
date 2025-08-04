@@ -28,7 +28,7 @@ import cartopy   # package to plot maps
 import warnings
 warnings.filterwarnings("ignore")
 
-ds = xr.open_dataset("./iCESM/selections/saltISLEAUHAUT.nc")
+ds = xr.open_dataset("./iCESM/selections/saltDELMARVA.nc")
 temp_ave = ds.mean('time')
 temp_ave = temp_ave.mean('z_t')
 temp_ave = temp_ave['SALT']
@@ -72,6 +72,7 @@ for i in range(temp_ave.shape[0]):
                 transform=ccrs.PlateCarree(),
                 zorder=90
             )
+            print(lon, lat)
 
 GeorgesBank = ax1.plot([-67.805333], [40.727667],
          color='blue', marker='o', markeredgecolor = 'blue', markeredgewidth = 2, markersize = 2,linestyle = 'None',zorder = 103

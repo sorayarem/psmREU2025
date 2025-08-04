@@ -15,8 +15,8 @@ from pyleoclim.utils.correlation import corr_isopersist
 ## setting up the model arugments
 parser = argparse.ArgumentParser(description='Running PSM...')
 parser.add_argument('--season', type=int, choices=[0, 1], default=0, help='Seasonal preference (0 = Annual, 1 = Expert)')
-parser.add_argument('--model', type=int, choices=[1, 2, 3], default=1, help='Model preference (1=Temp, 2=Salinity, 3=Both)')
-parser.add_argument('--iso', type=int, choices=[0, 1], default=1, help='Isotope preference (0 = Salt-Enabled, 1 = Isotope-Enabled)')
+parser.add_argument('--model', type=int, choices=[1, 2, 3], default=3, help='Model preference (1=Temp, 2=Salinity, 3=Both)')
+parser.add_argument('--iso', type=int, choices=[0, 1], default=0, help='Isotope preference (0 = Salt-Enabled, 1 = Isotope-Enabled)')
 args = parser.parse_args()
 
 ## setting the seasonal preference (F:Annual; T:Expert)
